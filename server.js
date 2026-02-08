@@ -1,10 +1,25 @@
-const http = require("http");
+require("dotenv").config();
+const express = require("express");
+const mongoose = require("mongoose");
 
-const server = http.createServer((req, res) => {
-  res.writeHead(200, { "Content-Type": "text/plain" });
-  res.end("Bspace backend is alive 🚀");
+const app = express();
+
+// Middleware
+app.use(express.json());
+
+// Test route
+app.get("/", (req, res) => {
+  res.send("Bspace API is running 🚀");
 });
 
-server.listen(3000, () => {
-  console.log("Bspace server running");
+// MongoDB connection
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error(err));
+
+// Server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Bspace server running on port ${PORT}`);
 });
